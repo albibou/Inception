@@ -9,4 +9,4 @@ RUN apt install vim -y
 COPY ./tools/mariadb.sh   mariadb.sh
 RUN  chmod +x mariadb.sh
 
-CMD ["./mariadb.sh"]
+#CMD ["./mariadb.sh"]
