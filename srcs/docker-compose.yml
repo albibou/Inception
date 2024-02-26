@@ -10,6 +10,7 @@ services:
     depends_on:
     - wordpress
     build: requirements/nginx
+    image: nginx 
     env_file: .env 
     ports:
       - "443:443"
@@ -22,6 +23,7 @@ services:
     networks:
     - inception
     build: requirements/mariadb
+    image: mariadb 
     env_file: .env 
     expose:
     - "3306"
@@ -34,6 +36,7 @@ services:
     networks:
     - inception
     build: requirements/wordpress
+    image: wordpress 
     env_file: .env 
     expose:
     - "9000"

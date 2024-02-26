@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [-f /var/lib/mysql/$SQL_DATABASE]; then
+if [find /var/lib/mysql/$SQL_DATABASE]; then
 	echo "Database already exists."
 
 else
@@ -15,8 +15,10 @@ else
 	echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$SQL_ROOT_PASSWORD';" | mariadb -u root
 	echo "FLUSH PRIVILEGES;" | mariadb -u root -p$SQL_ROOT_PASSWORD
 
-	mariadb -u root -p$SQL_ROOT_PASSWORD shutdown
+	kill $(cat /var/run/mysqld/mysqld.pid)
 
 fi
+
+sleep 5
 
 exec mysqld_safe
