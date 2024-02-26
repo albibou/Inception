@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [-f /var/www/html/wp-config.php]; then
+if [-d /var/www/html/wp-config.php]; then
 	echo "Database already exists."
 
 else
