@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [find /var/lib/mysql/$SQL_DATABASE]; then
+if [ -f /var/lib/mysql/$SQL_DATABASE ]; then
 	echo "Database already exists."
 
 else
