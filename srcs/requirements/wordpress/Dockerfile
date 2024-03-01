@@ -18,6 +18,9 @@ RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 COPY ./tools/wp_config.sh .
 RUN chmod +x wp_config.sh
-ENTRYPOINT ["/wp_config.sh"]
-WORKDIR /var/www/html/
-CMD ["/usr/sbin/php-fpm7.4", "-F"]
+# ENTRYPOINT ["/wp_config.sh"]
+# WORKDIR /var/www/html/
+# CMD [ "/usr/sbin/php-fpm7.4", "-F" ]
+
+RUN mkdir -p /run/php
+CMD [ "./wp_config.sh"]
