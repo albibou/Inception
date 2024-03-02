@@ -1,17 +1,32 @@
-all:
-	@docker compose -f ./srcs/docker-compose.yml up -d --build
+SRCS = ./srcs/requirements/nginx/Dockerfile \
+					./srcs/requirements/nginx/conf/nginx.conf \
+					./srcs/requirements/mariadb/Dockerfile \
+					./srcs/requirements/mariadb/conf/50-server.cnf \
+					./srcs/requirements/mariadb/tools/mariadb.sh \
+					./srcs/requirements/wordpress/Dockerfile \
+					./srcs/requirements/wordpress/tools/wp_config.sh \
+					./srcs/requirements/wordpress/conf/www.conf \
 
-down:
-	@docker compose -f ./srcs/docker-compose.yml down
+all : ${SRCS} env_file create_volumes_repo
+			docker compose -f ./srcs/docker-compose.yml up -d --build
 
-re:
-	@docker compose -f srcs/docker-compose.yml up -d --build
+env_file : 
+						if [ ! -e /srcs/.env ]; \
+						then \
+							cp ../home/atardif/.env /srcs/.; \
+						fi; 
 
-clean:
-	@docker stop $$(docker ps -qa);\
-	docker rm $$(docker ps -qa);\
-	docker rmi -f $$(docker images -qa);\
-	docker volume rm $$(docker volume ls -q);\
-	docker network rm $$(docker network ls -q);\
-
-.PHONY: all re down clean
+create_volumes_repo :
+						
+						if [ ! -d /home/atardif/data/ ]; \
+						then \
+							mkdir /home/atardif/data; \
+						fi ; \
+						if [ ! -d /home/atardif/data/wordpress ]; \
+						then \
+							mkdir /home/atardif/data/wordpress; \
+						fi ; \
+						if [ ! -d /home/atardif/data/mariadb ]; \
+						then \
+							mkdir /home/atardif/data/mariadb; \
+						fi ; 
