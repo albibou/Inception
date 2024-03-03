@@ -5,9 +5,7 @@ if [ -f /var/www/html/wp-config.php ]; then
 
 else
 
-	sleep 20
-
-	echo "je vais installer le wordpress"
+	sleep 15
 
 	./wp-cli.phar config create --allow-root \
 		--dbname=$SQL_DATABASE \
@@ -21,5 +19,4 @@ else
 
 fi
 
-echo "je sors du script"
 exec /usr/sbin/php-fpm7.4 -F

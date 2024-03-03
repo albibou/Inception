@@ -11,14 +11,14 @@ all : ${SRCS} env_file create_volumes_repo
 			docker compose -f ./srcs/docker-compose.yml up -d --build
 
 env_file : 
-						if [ ! -e /srcs/.env ]; \
+						@if [ ! -e /srcs/.env ]; \
 						then \
-							cp ../home/atardif/.env /srcs/.; \
+							cp /home/atardif/.env ./srcs/; \
 						fi; 
 
 create_volumes_repo :
 						
-						if [ ! -d /home/atardif/data/ ]; \
+						@if [ ! -d /home/atardif/data/ ]; \
 						then \
 							mkdir /home/atardif/data; \
 						fi ; \
@@ -30,3 +30,37 @@ create_volumes_repo :
 						then \
 							mkdir /home/atardif/data/mariadb; \
 						fi ; 
+
+down	: ${SRCS} env_file
+			docker compose -f ./srcs/docker-compose.yml down 
+
+clean : down
+				
+				@if [ "docker images nginx" ]; \
+				then \
+					docker rmi -f nginx; \
+				fi ; \
+				if [ "docker images mariadb" ]; \
+				then \
+					docker rmi -f mariadb; \
+				fi ; \
+				if [ "docker images wordpress" ]; \
+				then \
+					docker rmi -f wordpress; \
+				fi ; \
+				if [ "docker volume ls -f name=srcs_mariadb" ]; \
+				then \
+					docker volume rm -f srcs_mariadb; \
+				fi ; \
+				if [ "docker volume ls -f name=srcs_wordpress" ]; \
+				then \
+					docker volume rm -f wordpress; \
+				fi ; \
+				docker system prune -af;
+
+fclean : clean 
+					sudo rm -rf /home/atardif/data
+
+re : fclean all
+
+.PHONY: all re down clean fclean env_file create_volumes_repo
